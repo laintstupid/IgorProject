@@ -1,6 +1,8 @@
 <?php
 
-class UserBase
+declare(strict_types=1);
+
+final class UserBase
 {
     public $link;
     public $users;
