@@ -95,10 +95,12 @@ final class queryBuilder
         if (!isset($this->sortByWord)) {
             $this->sortByWord = '';
         }
-        if (!isset($this->column) || !isset($this->table)) {
-            throw new Exception('укажите параметр');
+        if (!isset($this->column)) {
+            throw new Exception('укажите параметр SELECT');
         }
-
+        if (!isset($this->table)) {
+            throw new Exception('укажите параметр FROM');
+        }
 
         $this->queryRequest = $this->connect->query("$this->column $this->table $this->tableJoin $this->onJoin $this->columnJoin $this->terms $this->wordORNumber $this->termsForGroupBy $this->sortByWord");
         while ($this->row = $this->queryRequest->fetch()) {
