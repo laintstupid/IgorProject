@@ -2,65 +2,103 @@
 
 declare(strict_types=1);
 
-require 'UserBase.php';
-
-
 final class queryBuilder
 {
+    public $row;
+    public object $queryRequest;
+    public string $column;
+    public string $table;
+    public string $tableJoin;
+    public string $onJoin;
+    public string $columnJoin;
+    public string $terms;
+    public string $sortByWord;
+    public string $wordORNumber;
+    public string $termsForGroupBy;
+    public object $connect;
 
-    public $wordORNumber;
-    public $column;
-    public $table;
-    public $terms;
-    public $sortByWord;
-    public $termsForGroupBy;
-
-
-    private function select($column): self
+    public function __construct($connect)
     {
-        $this->column = $column;
+        $this->connect = $connect;
+    }
+
+    public function select($column): self
+    {
+        $this->column = "SELECT $column";
 
         return $this;
     }
 
-    private function from($table): self
+    public function from($table): self
     {
-        $this->table = $table;
+        $this->table = "FROM $table";
 
         return $this;
     }
 
-    private function where($terms): self
+    public function innerJoin($tableJoin, $onJoin, $columnJoin): self
     {
-        $this->terms = $terms;
+        $this->tableJoin = "INNER JOIN $tableJoin";
+        $this->columnJoin = $columnJoin;
+        $this->onJoin = "ON $onJoin = $columnJoin";
 
         return $this;
     }
 
-    private function orderBy($sortByWord): self
+    public function where($terms): self
     {
-        $this->sortByWord = $sortByWord;
+        $this->terms = "WHERE $terms";
 
         return $this;
     }
 
-    private function groupBy($wordOrNumber): self
+    public function groupBy($wordOrNumber): self
     {
-        $this->wordORNumber = $wordOrNumber;
+        $this->wordORNumber = "GROUP BY $wordOrNumber";
 
         return $this;
     }
 
-    private function having($termsForGroupBy): self
+    public function having($termsForGroupBy): self
     {
-        $this->termsForGroupBy = $termsForGroupBy;
+        $this->termsForGroupBy = "HAVING $termsForGroupBy";
 
         return $this;
     }
 
+    public function orderBy($sortByWord): self
+    {
+        $this->sortByWord = "ORDER BY $sortByWord";
+        return $this;
+    }
 
     public function fetchAll()
     {
-        var_dump("SELECT $this->column FROM $this->table ORDER BY $this->sortByWord WHERE $this->terms GROUP BY $this->wordORNumber HAVING $this->termsForGroupBy");
+        if (!isset($this->tableJoin) || !isset($this->onJoin) || !isset($this->columnJoin)) {
+            $this->tableJoin = '';
+            $this->onJoin = '';
+            $this->columnJoin = '';
+        }
+
+        if (!isset($this->terms)) {
+            $this->terms = '';
+        }
+
+        if (!isset($this->wordORNumber)) {
+            $this->wordORNumber = '';
+        }
+
+        if (!isset($this->termsForGroupBy)) {
+            $this->termsForGroupBy = '';
+        }
+
+        if (!isset($this->sortByWord)) {
+            $this->sortByWord = '';
+        }
+
+        $this->queryRequest = $this->connect->query("$this->column $this->table $this->tableJoin $this->onJoin $this->columnJoin $this->terms $this->wordORNumber $this->termsForGroupBy $this->sortByWord");
+        while ($this->row = $this->queryRequest->fetch()) {
+            var_dump($this->row);
+        }
     }
 }
