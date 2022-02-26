@@ -1,7 +1,11 @@
 <?php
-class View
+
+declare(strict_types=1);
+
+final class View
 {
-    public function mainPage() {
+    public function mainPage()
+    {
        echo include 'VIEw.html';
     }
 }

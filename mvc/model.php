@@ -1,4 +1,8 @@
 <?php
-class Model{
+
+declare(strict_types=1);
+
+final class Model
+{
 
 }

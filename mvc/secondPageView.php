@@ -1,8 +1,11 @@
 <?php
 
-class secondPageView
+declare(strict_types=1);
+
+final class secondPageView
 {
-    public function userPage() {
+    public function userPage()
+    {
         echo include 'secondPage.html';
     }
 }
