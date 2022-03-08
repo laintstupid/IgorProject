@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require 'secondPageView.php';
+require 'UserRepository.php';
 
 final class UsersController
 {
@@ -11,7 +12,8 @@ final class UsersController
         $usersView = new secondPageView();
         $usersView->userPage();
 
-        $userBase = new UserBase();
-        $userBase->Base();
+        $userRepository = new UserRepository();
+        $users = $userRepository->getAll();
+        var_dump($users[1]->getId());
     }
 }

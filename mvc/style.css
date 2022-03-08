@@ -1,0 +1,40 @@
+h1 {
+    cursor: help;
+    margin: 0;
+    text-transform: uppercase;
+    padding-bottom: 5px;
+    border-bottom: 3px solid black;
+}
+form {
+    margin: 0 auto;
+    width: 450px;
+    height: 500px;
+    padding: 20px;
+}
+.group {
+    margin: 10px;
+    padding: 5px;
+}
+label {
+    padding-left: 10px;
+    text-transform: uppercase;
+}
+input {
+    margin-top: 10px;
+    height: 40px;
+    width: 400px;
+    border-radius: 20px/20px;
+    font-size: 18px;
+}
+input:focus {
+    border: 2px black;
+    transform: translateX(15px);
+    width: 385px;
+}
+button {
+    cursor: pointer;
+    padding: 10px 30px;
+    height: 50px;
+    color: white;
+    background: black;
+}
