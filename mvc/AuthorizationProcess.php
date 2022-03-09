@@ -17,8 +17,8 @@ class AuthorizationProcess
         $this->pass = md5($this->pass . "werwfs23hg41");
 
         $this->connection = new PDO('mysql:host=localhost;dbname=Mysql', 'root', '77143031');
-        $this->request = $this->connection->query("SELECT * FROM `users` WHERE `email` = '$this->email' AND `pass` = '$this->pass'");
-
+        $this->request = $this->connection->prepare("SELECT * FROM `users` WHERE email=:email AND pass=:pass");
+        $this->request->execute(['email' => $this->email, 'pass' => $this->pass]);
         $rows = [];
         while ($this->row = $this->request->fetch()) {
             $rows[] = $this->row;

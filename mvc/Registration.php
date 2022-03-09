@@ -30,7 +30,8 @@ class Registration
 
         $this->connection = new PDO('mysql:host=localhost;dbname=Mysql', 'root', '77143031');
 
-        $this->request = $this->connection->query("SELECT email FROM `users` WHERE `email` = '$this->email'");
+        $this->request = $this->connection->prepare('SELECT email FROM `users` WHERE email=:email');
+        $this->request->execute(['email' => $this->email]);
         $rows = [];
         while ($this->row = $this->request->fetch()) {
             $rows[] = $this->row;
