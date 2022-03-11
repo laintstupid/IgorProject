@@ -2,13 +2,10 @@
 
 declare(strict_types=1);
 
-
-
-final class RegistrationController
+final class registrationController
 {
-
     public function registerPage()
     {
-        require 'RegistrationForm.html';
+        require 'registrationForm.html';
     }
 }

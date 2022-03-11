@@ -2,24 +2,22 @@
 
 declare(strict_types=1);
 
-require 'QueryBuilder.php';
-require 'User.php';
+require 'queryBuilder.php';
+require 'user.php';
 
-
-
-final class UserRepository
+final class userRepository
 {
     private PDO $connection;
-    private QueryBuilder $qb;
+    private queryBuilder $qb;
 
     public function __construct()
     {
         $this->connection = new PDO('mysql:host=localhost;dbname=Mysql',  'root', '77143031');
-        $this->qb = new QueryBuilder($this->connection);
+        $this->qb = new queryBuilder($this->connection);
     }
 
     /**
-     * @return User[]
+     * @return user[]
      */
     public function getAll(): array
     {
@@ -29,12 +27,11 @@ final class UserRepository
             ->fetchAll();
 
         return array_map(
-            static function(array $user): User {
-                return new User(
+            static function(array $user): user {
+                return new user(
                     $user['id'],
-                    $user['name'],
-                    $user['bio'],
-                    $user['birth'],
+                    $user['email'],
+                    $user['pass'],
                 );
             },
             $users,

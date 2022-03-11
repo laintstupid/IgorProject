@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 require 'view.php';
 
-final class MainPageController
+final class mainPageController
 {
     public function getInfo()
     {

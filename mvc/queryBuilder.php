@@ -2,10 +2,8 @@
 
 declare(strict_types=1);
 
-final class QueryBuilder
+final class queryBuilder
 {
-    public $row;
-    public object $queryRequest;
     public string $column;
     public string $table;
     public string $tableJoin;
@@ -69,6 +67,7 @@ final class QueryBuilder
     public function orderBy($sortByWord): self
     {
         $this->sortByWord = "ORDER BY $sortByWord";
+
         return $this;
     }
 
@@ -104,11 +103,12 @@ final class QueryBuilder
             throw new Exception('укажите параметр FROM');
         }
 
-        $this->queryRequest = $this->connect->query("$this->column $this->table $this->tableJoin $this->onJoin $this->columnJoin $this->terms $this->wordORNumber $this->termsForGroupBy $this->sortByWord");
+        $queryRequest = $this->connect->query("$this->column $this->table $this->tableJoin $this->onJoin $this->columnJoin $this->terms $this->wordORNumber $this->termsForGroupBy $this->sortByWord");
         $rows = [];
-        while ($this->row = $this->queryRequest->fetch()) {
-            $rows[] = $this->row;
+        while ($row = $queryRequest->fetch()) {
+            $rows[] = $row;
         }
+
         return $rows;
     }
 }
