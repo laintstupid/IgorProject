@@ -2,39 +2,41 @@
 
 declare(strict_types=1);
 
-final class queryBuilder
+final class QueryBuilder
 {
-    public string $column;
-    public string $table;
-    public string $tableJoin;
-    public string $onJoin;
-    public string $columnJoin;
-    public string $terms;
-    public string $sortByWord;
-    public string $wordORNumber;
-    public string $termsForGroupBy;
-    public object $connect;
+    private string $column;
+    private string $table;
+    private string $tableJoin;
+    private string $onJoin;
+    private string $columnJoin;
+    private string $terms;
+    private string $sortByWord;
+    private string $wordORNumber;
+    private string $termsForGroupBy;
+    private array $parameters;
+    private PDO $connect;
 
-    public function __construct($connect)
+    public function __construct(PDO $connect)
     {
         $this->connect = $connect;
+        $this->parameters = [];
     }
 
-    public function select($column): self
+    public function select(string $column): self
     {
         $this->column = "SELECT $column";
 
         return $this;
     }
 
-    public function from($table): self
+    public function from(string $table): self
     {
         $this->table = "FROM $table";
 
         return $this;
     }
 
-    public function innerJoin($tableJoin, $onJoin, $columnJoin): self
+    public function innerJoin(string $tableJoin, string $onJoin, string $columnJoin): self
     {
         $this->tableJoin = "INNER JOIN $tableJoin";
         $this->columnJoin = $columnJoin;
@@ -43,35 +45,45 @@ final class queryBuilder
         return $this;
     }
 
-    public function where($terms): self
+    public function where(string $terms): self
     {
         $this->terms = "WHERE $terms";
 
         return $this;
     }
 
-    public function groupBy($wordOrNumber): self
+    public function groupBy(string $wordOrNumber): self
     {
         $this->wordORNumber = "GROUP BY $wordOrNumber";
 
         return $this;
     }
 
-    public function having($termsForGroupBy): self
+    public function having(string $termsForGroupBy): self
     {
         $this->termsForGroupBy = "HAVING $termsForGroupBy";
 
         return $this;
     }
 
-    public function orderBy($sortByWord): self
+    public function orderBy(string $sortByWord): self
     {
         $this->sortByWord = "ORDER BY $sortByWord";
 
         return $this;
     }
 
-    public function fetchAll()
+    public function setParameter(string $name, $value): self
+    {
+        $this->parameters[$name] = $value;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function fetchAll(): array
     {
         if (!isset($this->tableJoin) || !isset($this->onJoin) || !isset($this->columnJoin)) {
             $this->tableJoin = '';
@@ -103,7 +115,8 @@ final class queryBuilder
             throw new Exception('укажите параметр FROM');
         }
 
-        $queryRequest = $this->connect->query("$this->column $this->table $this->tableJoin $this->onJoin $this->columnJoin $this->terms $this->wordORNumber $this->termsForGroupBy $this->sortByWord");
+        $queryRequest = $this->connect->prepare("$this->column $this->table $this->tableJoin $this->onJoin $this->columnJoin $this->terms $this->wordORNumber $this->termsForGroupBy $this->sortByWord");
+        $queryRequest->execute($this->parameters);
         $rows = [];
         while ($row = $queryRequest->fetch()) {
             $rows[] = $row;

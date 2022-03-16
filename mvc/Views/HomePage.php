@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-final class View
+final class HomePage
 {
     public function mainPage()
     {
-       echo include 'view.html';
+       require 'HomePage.html';
     }
 }
 

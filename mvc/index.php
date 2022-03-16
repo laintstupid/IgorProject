@@ -3,38 +3,30 @@
 declare(strict_types=1);
 
 try {
-require 'mainPageController.php';
-require 'usersController.php';
-require 'userBase.php';
-require 'registrationController.php';
-require 'registration.php';
-require 'authorizationController.php';
-require 'authorizationProcess.php';
+require 'Require.php';
 
 if ($_SERVER['REQUEST_URI'] === '/user') {
-    $usersController = new usersController();
+    $usersController = new UserController();
     $usersController->users();
-
 } elseif ($_SERVER['REQUEST_URI'] === '/registration') {
-    $register = new registrationController();
+    $register = new RegistrationController();
     $register->registerPage();
-
 } elseif ($_SERVER['REQUEST_URI'] === '/registration-process') {
-    $registerProcess = new registration();
+    $registerProcess = new Registration();
     $registerProcess->register();
-
 } elseif ($_SERVER['REQUEST_URI'] === '/auth') {
-    $authorizationPage = new authorizationController();
+    $authorizationPage = new AuthorizationController();
     $authorizationPage->authPage();
-
 } elseif ($_SERVER['REQUEST_URI'] === '/auth-process'){
-    $authorizeProcess = new authorizationProcess();
+    $authorizeProcess = new AuthorizationProcess();
     $authorizeProcess->auth();
+} elseif ($_SERVER['REQUEST_URI'] === '/updating'){
+    $updatingProcess = new UpdateNameController();
+    $updatingProcess->nameUpdate();
 } else {
-    $mainPage = new mainPageController();
-    $mainPage->getInfo();
+    $mainPage = new MainPageController();
+    $mainPage->render();
 }
-
 } catch (Throwable $exception) {
     var_dump($exception->getMessage());
 }
